@@ -221,15 +221,11 @@ function getWeekNumberByDate(date) {
   );
   const numberOfDays =
     Math.floor((dateUTC - firstJan) / (24 * 60 * 60 * 1000)) + 1;
-  console.log('number', numberOfDays);
+
   if (firstJan.getUTCDay() === 1) {
-    console.log('first', (dateUTC.getDay() + numberOfDays) / 7);
     return Math.round((dateUTC.getDay() + numberOfDays) / 7);
   }
-  console.log(
-    'others',
-    (dateUTC.getDay() + numberOfDays + ((7 - firstJan.getUTCDay()) % 7)) / 7
-  );
+
   return Math.ceil(
     (dateUTC.getDay() + numberOfDays + ((7 - firstJan.getUTCDay()) % 7)) / 7
   );
