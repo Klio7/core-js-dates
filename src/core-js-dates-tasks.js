@@ -54,7 +54,7 @@ function getTime(date) {
  */
 function getDayName(date) {
   const newDate = new Date(date);
-  const dayNum = newDate.getDay();
+  const dayNum = newDate.getUTCDay();
   const week = {
     0: 'Sunday',
     1: 'Monday',
@@ -219,16 +219,13 @@ function getWeekNumberByDate(date) {
   const dateUTC = new Date(
     Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
   );
-  const numberOfDays =
-    Math.floor((dateUTC - firstJan) / (24 * 60 * 60 * 1000)) + 1;
-
-  if (firstJan.getUTCDay() === 1) {
-    return Math.round((dateUTC.getDay() + numberOfDays) / 7);
-  }
-
-  return Math.ceil(
-    (dateUTC.getDay() + numberOfDays + ((7 - firstJan.getUTCDay()) % 7)) / 7
+  const daysOfWeek = [1, 0, 6, 5, 4, 3, 2];
+  const nextMonday = firstJan.getUTCDay();
+  const numberOfDays = Math.floor(
+    (dateUTC - firstJan) / (24 * 60 * 60 * 1000) - daysOfWeek[nextMonday]
   );
+
+  return Math.ceil(numberOfDays / 7) + (nextMonday === 1 ? 0 : 1);
 }
 
 /**
@@ -242,8 +239,21 @@ function getWeekNumberByDate(date) {
  * Date(2024, 0, 13) => Date(2024, 8, 13)
  * Date(2023, 1, 1) => Date(2023, 9, 13)
  */
-function getNextFridayThe13th(/* date */) {
-  throw new Error('Not implemented');
+function getNextFridayThe13th(date) {
+  const nDate = new Date(
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+  );
+  while (nDate.getUTCDay() !== 5) {
+    nDate.setUTCDate(nDate.getUTCDate() + 1);
+  }
+
+  for (let i = 0; i < 50; i += 1) {
+    while (nDate.getUTCDate() !== 13) {
+      nDate.setUTCDate(nDate.getUTCDate() + 7);
+    }
+  }
+
+  return new Date(nDate.getFullYear(), nDate.getMonth(), nDate.getDate());
 }
 
 /**
