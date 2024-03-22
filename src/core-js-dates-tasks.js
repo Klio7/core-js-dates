@@ -79,9 +79,9 @@ function getDayName(date) {
  * Date('2024-02-16T00:00:00Z') => Date('2024-02-23T00:00:00Z')
  */
 function getNextFriday(date) {
-  const theDate = date.getDate();
+  const theDate = date.getUTCDate();
   const nextFriday = new Date(
-    date.setDate(theDate + ((7 - date.getDay() + 5) % 7 || 7))
+    date.setUTCDate(theDate + ((7 - date.getUTCDay() + 5) % 7 || 7))
   );
   return nextFriday;
 }
@@ -98,7 +98,7 @@ function getNextFriday(date) {
  * 2, 2024 => 29
  */
 function getCountDaysInMonth(month, year) {
-  const theDate = new Date(year, month);
+  const theDate = new Date(Date.UTC(year, month, 0));
   const daysNumber = theDate.getUTCDate();
   return daysNumber;
 }
@@ -193,8 +193,8 @@ function getCountWeekendsInMonth(month, year) {
   const sDate = new Date(Date.UTC(year, month - 1, 1));
   const eDate = new Date(Date.UTC(year, month, 0));
   let count = 0;
-  for (; sDate <= eDate; sDate.setDate(sDate.getDate() + 1)) {
-    if (sDate.getDay() === 0 || sDate.getDay() === 6) {
+  for (; sDate <= eDate; sDate.setUTCDate(sDate.getUTCDate() + 1)) {
+    if (sDate.getUTCDay() === 0 || sDate.getUTCDay() === 6) {
       count += 1;
     }
   }
@@ -217,7 +217,7 @@ function getCountWeekendsInMonth(month, year) {
 function getWeekNumberByDate(date) {
   const firstJan = new Date(Date.UTC(date.getFullYear(), 0, 1));
   const dateUTC = new Date(
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    Date.UTC(date.getFullYear(), date.getUTCMonth(), date.getUTCDate())
   );
   const daysOfWeek = [1, 0, 6, 5, 4, 3, 2];
   const nextMonday = firstJan.getUTCDay();
@@ -253,7 +253,7 @@ function getNextFridayThe13th(date) {
     }
   }
 
-  return new Date(nDate.getFullYear(), nDate.getMonth(), nDate.getDate());
+  return new Date(nDate.getFullYear(), nDate.getUTCMonth(), nDate.getUTCDate());
 }
 
 /**
